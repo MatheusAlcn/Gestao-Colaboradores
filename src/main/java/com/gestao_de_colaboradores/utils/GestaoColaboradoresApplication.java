@@ -1,13 +1,13 @@
-package com.gestao_de_colaboradores;
+package com.gestao_de_colaboradores.utils;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Gestao_ColaboradoresApplication {
+public class GestaoColaboradoresApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Gestao_ColaboradoresApplication.class, args);
+		SpringApplication.run(GestaoColaboradoresApplication.class, args);
 	}
 
 }
