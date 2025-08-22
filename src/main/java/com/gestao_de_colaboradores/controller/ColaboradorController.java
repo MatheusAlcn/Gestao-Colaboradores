@@ -11,35 +11,42 @@ import java.util.List;
 @RequestMapping("/colaboradores")
 public class ColaboradorController {
 
-    private final ColaboradorService service;
+    private final ColaboradorService colaboradorService;
 
-    public ColaboradorController(ColaboradorService service) {
-        this.service = service;
+    public ColaboradorController(ColaboradorService colaboradorService) {
+        this.colaboradorService = colaboradorService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Colaborador>> listarTodos() {
-        return ResponseEntity.ok(service.findAll());
+    public List<Colaborador> listarTodos() {
+        return colaboradorService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Colaborador> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(service.findById(id));
+    public ResponseEntity<Colaborador> getColaboradorById(@PathVariable Long id) {
+        return colaboradorService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Colaborador> criar(@RequestBody Colaborador colaborador) {
-        return ResponseEntity.status(201).body(service.save(colaborador));
+    public Colaborador criarColaborador(@RequestBody Colaborador colaborador) {
+        return colaboradorService.criar(colaborador);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Colaborador> atualizar(@PathVariable Long id, @RequestBody Colaborador dados) {
-        return ResponseEntity.ok(service.update(id, dados));
+    public ResponseEntity<Colaborador> atualizarColaborador(
+            @PathVariable Long id,
+            @RequestBody Colaborador colaboradorAtualizado) {
+
+        return colaboradorService.atualizar(id, colaboradorAtualizado)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletarColaborador(@PathVariable Long id) {
+        boolean excluido = colaboradorService.deletar(id);
+        return excluido ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

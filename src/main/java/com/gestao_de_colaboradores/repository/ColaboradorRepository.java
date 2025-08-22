@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ColaboradorRepository extends JpaRepository<Colaborador, Long> {
-    // JpaRepository já fornece findById, save, findAll, deleteById
 }

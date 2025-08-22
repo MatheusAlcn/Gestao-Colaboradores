@@ -1,72 +1,56 @@
 package com.gestao_de_colaboradores.service;
 
 import com.gestao_de_colaboradores.entity.Colaborador;
-import com.gestao_de_colaboradores.exception.ColaboradorNotFoundException;
 import com.gestao_de_colaboradores.repository.ColaboradorRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class ColaboradorService {
 
-    private final ColaboradorRepository repository;
+    private final ColaboradorRepository colaboradorRepository;
 
-    public ColaboradorService(ColaboradorRepository repository) {
-        this.repository = repository;
+    public ColaboradorService(ColaboradorRepository colaboradorRepository) {
+        this.colaboradorRepository = colaboradorRepository;
     }
 
-    // Criar ou salvar
-    public Colaborador save(Colaborador colaborador) {
-        validarDados(colaborador);
-        colaborador.setAtivo(true);
-        return repository.save(colaborador);
-    }
-
-    // Buscar por ID
-    public Colaborador findById(Long id) {
-        return repository.findById(id)
+    public List<Colaborador> listarTodos() {
+        return colaboradorRepository.findAll().stream()
                 .filter(Colaborador::isAtivo)
-                .orElseThrow(() -> new ColaboradorNotFoundException(id));
+                .toList();
     }
 
-    // Buscar todos ativos
-    public List<Colaborador> findAll() {
-        return repository.findAll().stream()
+    public Optional<Colaborador> buscarPorId(Long id) {
+        return colaboradorRepository.findById(id)
+                .filter(Colaborador::isAtivo);
+    }
+
+    public Colaborador criar(Colaborador colaborador) {
+        return colaboradorRepository.save(colaborador);
+    }
+
+    public Optional<Colaborador> atualizar(Long id, Colaborador dados) {
+        return colaboradorRepository.findById(id)
                 .filter(Colaborador::isAtivo)
-                .collect(Collectors.toList());
+                .map(col -> {
+                    col.setNome(dados.getNome());
+                    col.setEmail(dados.getEmail());
+                    col.setCargo(dados.getCargo());
+                    col.setSetor(dados.getSetor());
+                    col.setDataAdmissao(dados.getDataAdmissao());
+                    return colaboradorRepository.save(col);
+                });
     }
 
-    // Atualizar
-    @Transactional
-    public Colaborador update(Long id, Colaborador dadosNovos) {
-        Colaborador colaboradorExistente = findById(id);
-        validarDados(dadosNovos);
-
-        colaboradorExistente.setNome(dadosNovos.getNome());
-        colaboradorExistente.setCargo(dadosNovos.getCargo());
-        colaboradorExistente.setEmail(dadosNovos.getEmail());
-        colaboradorExistente.setSetor(dadosNovos.getSetor());
-
-        return colaboradorExistente;
-    }
-
-    // Soft delete
-    @Transactional
-    public void delete(Long id) {
-        Colaborador colaborador = findById(id);
-        colaborador.setAtivo(false);
-    }
-
-    // Validação de dados
-    private void validarDados(Colaborador colaborador) {
-        if (colaborador.getNome() == null || colaborador.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome não pode ser vazio");
-        }
-        if (colaborador.getCargo() == null || colaborador.getCargo().trim().isEmpty()) {
-            throw new IllegalArgumentException("Cargo não pode ser vazio");
-        }
+    public boolean deletar(Long id) {
+        return colaboradorRepository.findById(id)
+                .filter(Colaborador::isAtivo)
+                .map(col -> {
+                    col.setAtivo(false);
+                    colaboradorRepository.save(col);
+                    return true;
+                }).orElse(false);
     }
 }
