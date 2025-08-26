@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ColaboradorSpecification {
-
+    
+    /**
+     * Cria uma Specification de Colaborador com filtros opcionais de nome, setor e cargo.
+     * Sempre retorna apenas colaboradores ativos.
+     */
     public static Specification<Colaborador> comFiltros(String nome, String setor, String cargo) {
         return (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
