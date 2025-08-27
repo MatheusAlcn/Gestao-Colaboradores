@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller responsável por gerenciar colaboradores.
+ * Fornece endpoints para CRUD, busca por filtros e soft delete.
+ */
+
 @RestController
 @RequestMapping("/colaboradores")
 @CrossOrigin("*")

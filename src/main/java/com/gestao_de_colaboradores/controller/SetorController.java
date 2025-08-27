@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelos setores.
+ * Permite CRUD completo para a entidade Setor.
+ */
+
 @RestController
 @RequestMapping("/setores")
 @CrossOrigin("*")

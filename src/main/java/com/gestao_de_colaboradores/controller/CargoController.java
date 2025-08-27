@@ -7,9 +7,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller responsável por gerenciar os endpoints relacionados a cargos.
+ * Permite CRUD completo: criação, leitura, atualização e remoção de cargos.
+ */
+
 @RestController
 @RequestMapping("/cargos")
-@CrossOrigin("*")
+@CrossOrigin("*") // Permite chamadas de qualquer origem, útil para frontend separado
 public class CargoController {
 
     private final CargoRepository repo;
