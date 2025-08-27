@@ -16,6 +16,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
+/**
+ * Serviço responsável pelo gerenciamento de colaboradores.
+ * Contém métodos para CRUD completo, soft delete e busca dinâmica por filtros.
+ *
+ * Responsável por:
+ * - Garantir a integridade de dados (cargo e setor válidos)
+ * - Transformar entidades em DTOs para o frontend
+ * - Gerenciar transações de forma segura
+ */
+
 @Service
 public class ColaboradorService {
 
