@@ -1,17 +1,11 @@
 package com.gestao_de_colaboradores.controller;
 
-import com.gestao_de_colaboradores.dto.ColaboradorRequest;
-import com.gestao_de_colaboradores.dto.ColaboradorResponse;
+import com.gestao_de_colaboradores.entity.Colaborador;
 import com.gestao_de_colaboradores.service.ColaboradorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-/**
- * Controller responsável por gerenciar colaboradores.
- * Fornece endpoints para CRUD, busca por filtros e soft delete.
- */
 
 @RestController
 @RequestMapping("/colaboradores")
@@ -25,23 +19,23 @@ public class ColaboradorController {
     }
 
     @PostMapping
-    public ResponseEntity<ColaboradorResponse> create(@RequestBody ColaboradorRequest req) {
-        return ResponseEntity.ok(service.create(req));
+    public ResponseEntity<Colaborador> create(@RequestBody Colaborador colaborador) {
+        return ResponseEntity.ok(service.create(colaborador));
     }
 
     @GetMapping
-    public List<ColaboradorResponse> list() {
+    public List<Colaborador> list() {
         return service.list();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ColaboradorResponse> get(@PathVariable Long id) {
+    public ResponseEntity<Colaborador> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.get(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ColaboradorResponse> update(@PathVariable Long id, @RequestBody ColaboradorRequest req) {
-        return ResponseEntity.ok(service.update(id, req));
+    public ResponseEntity<Colaborador> update(@PathVariable Long id, @RequestBody Colaborador colaborador) {
+        return ResponseEntity.ok(service.update(id, colaborador));
     }
 
     @DeleteMapping("/{id}")
@@ -51,7 +45,7 @@ public class ColaboradorController {
     }
 
     @GetMapping("/search")
-    public List<ColaboradorResponse> search(
+    public List<Colaborador> search(
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) String setor,
             @RequestParam(required = false) String cargo) {
